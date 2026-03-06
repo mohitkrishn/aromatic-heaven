@@ -1,5 +1,5 @@
 import express from "express";
-import { bookService, getMe, loginUser, logoutUser, myAccount, registerUser, serviceDetails } from "../controller/user.controller.js";
+import { bookService, forgotPassword, getMe, loginUser, logoutUser, myAccount, registerUser, resetPassword, serviceDetails } from "../controller/user.controller.js";
 import { verifyUser } from "../middlewares/user.middleware.js";
 import { allServices } from "../controller/services.controller.js";
 
@@ -52,6 +52,16 @@ router.get("/me", verifyUser, getMe);
  * /api/auth/service-details/:id
  */
 router.get("/service-details/:id", verifyUser, serviceDetails);
+
+/**
+ * /api/auth/forgot-password
+ */
+router.post("/forgot-password", forgotPassword);
+
+/**
+ * /api/auth/reset-password
+ */
+router.post("/reset-password/:token", resetPassword);
 
 
 

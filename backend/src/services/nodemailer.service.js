@@ -4,6 +4,7 @@ dotenv.config();
 import nodemailer from 'nodemailer';
 import { WELCOME_EMAIL_TEMPLATE } from '../email/welcome.email.js';
 import { ORDER_CONFIRMATION_EMAIL_TEMPLATE } from '../email/orderConfirm.email.js';
+import { RESET_PASSWORD_EMAIL_TEMPLATE } from '../email/resetPasswordEmail.js';
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -35,6 +36,19 @@ export const orderConfirmationEmail = async (to, name, serviceName, price) => {
             .replace("[User Name]", name)
             .replace("[Type of Service, e.g., Stress-Buster Head Massage]", serviceName)
             .replace("[Price]", price)
+    }
+
+    await transporter.sendMail(mailOptions);
+}
+
+export const resetPasswordEmail = async (to, user, link) => {
+    const mailOptions = {
+        from: process.env.EMAIL_ID,
+        to,
+        subject: 'Reset Your Password - Aromatic Heaven',
+        html: RESET_PASSWORD_EMAIL_TEMPLATE
+            .replace("[ResetLinkButton]", link)
+            .replace("[User Name]", user)
     }
 
     await transporter.sendMail(mailOptions);

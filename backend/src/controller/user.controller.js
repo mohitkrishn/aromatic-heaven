@@ -1,9 +1,10 @@
-import BookService from "../models/bookService.model.js";
-import Services from "../models/services.model.js";
-import User from "../models/user.model.js";
-import { orderConfirmationEmail, sendWelcomeEmail } from "../services/nodemailer.service.js";
-import { generateToken } from "./auth.controller.js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import BookService from "../models/bookService.model.js";
+import User from "../models/user.model.js";
+import Services from "../models/services.model.js";
+import { orderConfirmationEmail, resetPasswordEmail, sendWelcomeEmail } from "../services/nodemailer.service.js";
+import { generateToken } from "./auth.controller.js";
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -225,6 +226,106 @@ export const serviceDetails = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+}
+
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        //create reset token
+        const resetToken = crypto.randomBytes(20).toString("hex");
+
+        //hash token
+        const hashedToken = crypto
+            .createHash("sha256")
+            .update(resetToken)
+            .digest("hex");
+
+        //set reset token
+        user.resetPasswordToken = hashedToken;
+        user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes of token expiry
+
+        await user.save();
+
+        //send reset link
+        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+        // console.log(resetLink);
+
+        //send reset password email
+        await resetPasswordEmail(user.email, user.name, resetLink);
+
+        return res.status(200).json({
+            success: true,
+            message: "If the email is registered with us, you will receive an email with instructions to reset your password within the next 10 minutes."
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+}
+
+export const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    //hash token to compare the token
+    const hasedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: hasedToken,
+            resetPasswordExpire: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            // Find user by token (even if expired) to clear fields
+            const userToClear = await User.findOne({ resetPasswordToken: hasedToken });
+            if (userToClear) {
+                userToClear.resetPasswordToken = undefined;
+                userToClear.resetPasswordExpire = undefined;
+                await userToClear.save();
+            }
+
+            return res.status(404).json({
+                success: false,
+                message: "Token invalid or expired"
+            });
+        }
+
+        //hash the new password
+        const newHashedPassword = await bcrypt.hash(password, 10);
+
+        user.password = newHashedPassword;
+
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Password reset successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
             message: "Internal Server Error",
             error: error.message
         });
