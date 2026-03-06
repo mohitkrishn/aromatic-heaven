@@ -7,6 +7,8 @@ import MyAccount from "./features/auth/pages/MyAccount";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Services from "./features/auth/pages/Services";
 import BookService from "./features/auth/pages/BookService";
+import ForgotPassword from "./features/auth/pages/ForgotPassword";
+import ResetPassword from "./features/auth/pages/ResetPassword";
 
 const AppRoutes = () => {
     // <BrowserRouter>
@@ -49,6 +51,14 @@ const AppRoutes = () => {
                     element: <ProtectedRoute>
                         <BookService />
                     </ProtectedRoute>
+                },
+                {
+                    path: "/forgot-password",
+                    element: <ForgotPassword />
+                },
+                {
+                    path: "/reset-password/:token",
+                    element: <ResetPassword />
                 }
             ]
         }

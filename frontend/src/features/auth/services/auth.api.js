@@ -95,3 +95,27 @@ export async function getServiceDetails(serviceId) {
         throw error.response.data;
     }
 }
+
+export async function forgotPassword(email) {
+    try {
+        const response = await baseUrl.post("/forgot-password", { email });
+
+        return response.data;
+
+    } catch (error) {
+
+        throw error.response.data;
+    }
+}
+
+export async function resetPassword(token, password) {
+    try {
+        const response = await baseUrl.post(`/reset-password/${token}`, { password });
+
+        return response.data;
+
+    } catch (error) {
+
+        throw error.response.data;
+    }
+}

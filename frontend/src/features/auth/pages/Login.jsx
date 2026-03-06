@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import loginBg from "../../../assets/images/PC-14.jpg";
-import texture from "../../../assets/images/textture-bg.avif";
 import { useLoginStore } from '../../../stores/auth.store';
 import { Eye, EyeOff } from 'lucide-react';
 
@@ -62,11 +61,6 @@ const Login = () => {
             style={{ backgroundImage: `url(${loginBg})`, filter: "grayscale(100%)" }}
         >
             <div
-                className="w-full h-full absolute inset-0 z-30 opacity-40 pointer-events-none"
-                style={{ backgroundImage: `url(${texture})` }}
-            ></div>
-
-            <div
                 className="min-w-2xs rounded-3xl bg-white p-4 flex flex-col items-center gap-6"
             >
                 <h1
@@ -92,6 +86,7 @@ const Login = () => {
                         value={userData.email}
                         onChange={handleChange}
                     />
+                    {/* password */}
                     <div className='w-full flex justify-between items-center pt-2 border-b border-b-zinc-800'>
                         <input
                             type={`${seePassword}`}
@@ -118,6 +113,7 @@ const Login = () => {
                             )
                         }
                     </div>
+                    <Link to="/forgot-password" className="text-xs text-center italic leading-none">Forgot Password?</Link>
 
                     <button
                         type="submit"
