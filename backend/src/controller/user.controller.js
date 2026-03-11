@@ -5,6 +5,7 @@ import User from "../models/user.model.js";
 import Services from "../models/services.model.js";
 import { orderConfirmationEmail, resetPasswordEmail, sendWelcomeEmail } from "../services/nodemailer.service.js";
 import { generateToken } from "./auth.controller.js";
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -39,13 +40,19 @@ export const registerUser = async (req, res) => {
 
         await newUser.save();
 
-        const token = generateToken(newUser, res);
+        const token = generateToken(newUser, res, "1d");
+
+        //generate link to verify account
+        const verifyLink = `${process.env.CLIENT_URL}/verify-account/${token}`;
 
         //send welcome email
-        await sendWelcomeEmail(email, name);
+        await sendWelcomeEmail(email, name, verifyLink);
+
+        // //send verify account email
+        // await verifyUserEmail(email, name, verifyLink);
 
         return res.status(201).json({
-            message: "User registered successfully",
+            message: "User registered successfully, verify your account to login",
             // user: { ...newUser._doc, password: undefined, token }
         });
 
@@ -55,6 +62,47 @@ export const registerUser = async (req, res) => {
             error: error.message
         });
     }
+}
+
+export const verifyAccount = async (req, res) => {
+    const { token } = req.params;
+
+    try {
+        const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid token"
+            });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({
+                success: false,
+                message: "Account already verified"
+            });
+        }
+
+        user.isVerified = true;
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Account verified successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error verifying account",
+            error: error.message
+        });
+    }
+
 }
 
 export const loginUser = async (req, res) => {
@@ -81,7 +129,7 @@ export const loginUser = async (req, res) => {
             });
         }
 
-        const token = generateToken(user, res);
+        const token = generateToken(user, res, "7d");
 
         return res.status(200).json({
             success: true,

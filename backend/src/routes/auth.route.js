@@ -1,5 +1,5 @@
 import express from "express";
-import { bookService, forgotPassword, getMe, loginUser, logoutUser, myAccount, registerUser, resetPassword, serviceDetails } from "../controller/user.controller.js";
+import { bookService, forgotPassword, getMe, loginUser, logoutUser, myAccount, registerUser, resetPassword, serviceDetails, verifyAccount } from "../controller/user.controller.js";
 import { verifyUser } from "../middlewares/user.middleware.js";
 import { allServices } from "../controller/services.controller.js";
 
@@ -17,6 +17,13 @@ router.get("/", (req, res) => {
  * /api/auth/register
  */
 router.post("/register", registerUser);
+
+/*
+ * @desc Verify account via email link
+ * @
+ * /api/auth/verify-account
+ */
+router.post("/verify-account/:token", verifyAccount);
 
 /**
  * /api/auth/login

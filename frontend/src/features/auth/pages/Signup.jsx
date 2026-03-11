@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { signup } from "../services/auth.api";
-import signupBg from "../../../assets/images/pc-13.jpg"
-import texture from "../../../assets/images/textture-bg.avif"
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import signupBg from "../../../assets/images/pc-13.jpg";
+import texture from "../../../assets/images/textture-bg.avif";
 
 const Signup = () => {
 
-    const [userData, setUserData] = useState(
-        {
-            name: "",
-            email: "",
-            password: ""
-        }
-    );
+    const [userData, setUserData] = useState({
+        name: "",
+        email: "",
+        password: ""
+    });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,23 +25,23 @@ const Signup = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-
-        let response = await signup(userData);
-
-        if (response?.success) {
-
-            //clear form
-            setUserData({
-                name: "",
-                email: "",
-                password: ""
-            });
-
-            //redirect to login
-            window.location.href = "/login";
+        setLoading(true);
+        try {
+            let response = await signup(userData);
+            if (response?.success) {
+                setUserData({
+                    name: "",
+                    email: "",
+                    password: ""
+                });
+                window.location.href = "/login";
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
         }
-
-    }
+    };
 
     return (
         <main
@@ -87,6 +87,7 @@ const Signup = () => {
                         name="name"
                         value={userData.name}
                         onChange={handleChange}
+                        disabled={loading}
                     />
                     <input
                         type="email"
@@ -95,6 +96,7 @@ const Signup = () => {
                         name="email"
                         value={userData.email}
                         onChange={handleChange}
+                        disabled={loading}
                     />
                     <input
                         type="password"
@@ -103,14 +105,16 @@ const Signup = () => {
                         name="password"
                         value={userData.password}
                         onChange={handleChange}
+                        disabled={loading}
                     />
 
                     <button
                         type="submit"
-                        className="w-full h-10 bg-zinc-900 text-white rounded-lg mt-2 cursor-pointer active:scale-95 transition-transform duration-200"
+                        className="w-full h-10 bg-zinc-900 text-white rounded-lg mt-2 cursor-pointer active:scale-95 transition-transform duration-200 flex items-center justify-center"
                         style={{ fontFamily: "Funnel Sans" }}
+                        disabled={loading}
                     >
-                        Signup
+                        {loading ? <LoadingSpinner size={24} color="#fff" ariaLabel="Signing up..." /> : "Signup"}
                     </button>
 
                     {/* login link */}

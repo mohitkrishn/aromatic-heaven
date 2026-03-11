@@ -22,6 +22,10 @@ const userSchema = new Schema({
         minlength: 8,
         select: false
     },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date
 

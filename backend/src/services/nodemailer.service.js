@@ -5,6 +5,7 @@ import nodemailer from 'nodemailer';
 import { WELCOME_EMAIL_TEMPLATE } from '../email/welcome.email.js';
 import { ORDER_CONFIRMATION_EMAIL_TEMPLATE } from '../email/orderConfirm.email.js';
 import { RESET_PASSWORD_EMAIL_TEMPLATE } from '../email/resetPasswordEmail.js';
+// import { VERIFY_ACCOUNT_EMAIL_TEMPLATE } from '../email/verifyAccount.email.js';
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -16,12 +17,14 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export const sendWelcomeEmail = async (to, name) => {
+export const sendWelcomeEmail = async (to, name, link) => {
     const mailOptions = {
         from: process.env.EMAIL_ID,
         to,
         subject: 'Welcome to Aromatic Heaven',
-        html: WELCOME_EMAIL_TEMPLATE.replace("[User Name]!", name)
+        html: WELCOME_EMAIL_TEMPLATE
+        .replace("[User Name]!", name)
+        .replace("[Verification Link]", link)
     };
 
     await transporter.sendMail(mailOptions);
@@ -53,3 +56,16 @@ export const resetPasswordEmail = async (to, user, link) => {
 
     await transporter.sendMail(mailOptions);
 }
+
+// export const verifyUserEmail = async (to, user, link) => {
+//     const mailOptions = {
+//         from: process.env.EMAIL_ID,
+//         to,
+//         subject: 'Verify Your Account - Aromatic Heaven',
+//         html: VERIFY_ACCOUNT_EMAIL_TEMPLATE
+//             .replace("[User Name]", user)
+//             .replaceAll("[ResetLinkURL]", link)
+//     }
+
+//     await transporter.sendMail(mailOptions);
+// }

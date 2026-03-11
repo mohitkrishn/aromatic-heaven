@@ -16,6 +16,17 @@ export async function signup(data) {
     }
 }
 
+export async function verifyAccount(token) {
+    try {
+        const response = await baseUrl.post(`/verify-account/${token}`);
+
+        return response.data;
+
+    } catch (error) {
+        throw error.response.data;
+    }
+}
+
 export async function login(data) {
     try {
         const response = await baseUrl.post("/login", data);

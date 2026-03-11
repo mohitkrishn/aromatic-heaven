@@ -128,6 +128,14 @@ export const WELCOME_EMAIL_TEMPLATE = `
                 </td>
             </tr>
 
+            <!-- Verification Link Section -->
+            <tr>
+                <td class="button-container">
+                    <p style="margin-bottom: 10px; color: #1b4332; font-weight: bold;">Verify your account to unlock exclusive offers!</p>
+                    <a href="[Verification Link]" class="button" style="background-color: #1b4332;">VERIFY ACCOUNT</a>
+                </td>
+            </tr>
+
             <tr>
                 <td style="padding: 0 40px;">
                     <p style="color: #1b4332; font-weight: bold; text-align: center;">Discover Our Signature Rituals:</p>
