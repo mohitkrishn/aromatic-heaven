@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import loginBg from "../../../assets/images/PC-14.jpg";
 import { useLoginStore } from '../../../stores/auth.store';
 import { Eye, EyeOff } from 'lucide-react';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const Login = () => {
     const [userData, setUserData] = useState({
@@ -79,6 +80,7 @@ const Login = () => {
                     className="w-full h-fit flex flex-col gap-4 mt-6"
                 >
                     <input
+                        required
                         type="email"
                         placeholder="Email *"
                         className="w-full border-b pt-2 border-b-zinc-800 focus:outline-none"
@@ -89,6 +91,7 @@ const Login = () => {
                     {/* password */}
                     <div className='w-full flex justify-between items-center pt-2 border-b border-b-zinc-800'>
                         <input
+                            required
                             type={`${seePassword}`}
                             placeholder="Password *"
                             className="focus:outline-none"
@@ -121,7 +124,7 @@ const Login = () => {
                         style={{ fontFamily: "Funnel Sans" }}
                         disabled={loading}
                     >
-                        {loading ? "Logging in..." : "Login"}
+                        {loading ? <LoadingSpinner ariaLabel="Logging in..." /> : "Login"}
                     </button>
 
                     {/* login link */}

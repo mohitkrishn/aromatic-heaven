@@ -1,4 +1,6 @@
 import { User, Mail, Phone, LogOut, ShieldCheck } from 'lucide-react';
+import { useLoginStore } from '../stores/auth.store';
+import LoadingSpinner from './LoadingSpinner';
 
 const AccountProfile = ({ user, onLogout }) => {
     // Mock data agar props na ho toh (Aap ise req.user se replace karenge)
@@ -15,6 +17,7 @@ const AccountProfile = ({ user, onLogout }) => {
     //     return styles[status] || "bg-gray-50 text-gray-700";
     // }
 
+    const loading = useLoginStore(state => state.loading);
 
 
     return (
@@ -40,9 +43,11 @@ const AccountProfile = ({ user, onLogout }) => {
                         onClick={onLogout}
                         className="flex items-center justify-center gap-2 bg-red-50 text-red-600 px-6 py-2.5 rounded-lg font-semibold cursor-pointer hover:bg-red-100 transition-colors border border-red-200"
                         style={{ fontFamily: "Funnel Sans" }}
+                        disabled={loading}
+
                     >
                         <LogOut size={18} />
-                        Logout
+                        {loading ? <LoadingSpinner ariaLabel='Logging out...' /> : "Logout"}
                     </button>
                 </div>
 

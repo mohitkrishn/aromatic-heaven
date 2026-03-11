@@ -33,6 +33,18 @@ const Home = () => {
             Start Your Journey <MoveRight />
           </button>
         </div>
+
+        <div className="cta-login w-full flex items-center justify-center mt-4">
+          <button
+            className="bg-white text-black font-bold py-3.5 px-10 rounded-full mt-2 cursor-pointer active:scale-95 transition-transform duration-200 flex items-center justify-center-safe gap-2"
+            style={{ fontFamily: "Funnel Sans" }}
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Login
+          </button>
+        </div>
       </section>
 
     </main>

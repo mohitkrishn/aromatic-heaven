@@ -32,11 +32,19 @@ export const useLoginStore = create((set, get) => ({
 
     logout: async () => {
         try {
+            //set the laoding state
+            set({ loading: true });
+
             await logout();
+
         } catch (err) {
-            console.error("Logout error:", err);
+            set({
+                error: err.response?.data?.message || "Logout failed",
+                loading: false,
+            });
+
         } finally {
-            set({ user: null });
+            set({ user: null, loading: false });
         }
     },
 

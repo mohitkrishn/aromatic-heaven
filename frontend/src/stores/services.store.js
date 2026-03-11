@@ -5,12 +5,16 @@ import { allServices } from "../features/auth/services/auth.api";
 export const useServicesStore = create(persist(
     (set) => ({
         services: null,
+        loading: true,
         getServices: async () => {
             try {
+                set({ loading: true });
                 const { services } = await allServices();
-                set({ services });
+                set({ services, loading: false });
             } catch (error) {
-                console.error("Error fetching services:", error);
+                set({ loading: false, services: null, error: error.message });
+            } finally {
+                set({ loading: false });
             }
         }
     })
