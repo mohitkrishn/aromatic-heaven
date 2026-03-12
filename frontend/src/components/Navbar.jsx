@@ -212,7 +212,7 @@ const Navbar = () => {
                                 className="w-full text-center px-4 py-2 rounded-full text-white text-[1.25rem] leading-5"
                             >
                                 <NavLink
-                                    to="/bookings"
+                                    to="/my-bookings"
                                     className={({ isActive }) => isActive ? "border-b border-white" : ""}
                                 >
                                     My Bookings
@@ -289,7 +289,7 @@ const Navbar = () => {
                     </NavLink>
 
                     <NavLink
-                        to="/bookings"
+                        to="/my-bookings"
                         className={({ isActive }) => isActive ? "text-white text-[1rem] leading-5 font-['Outfit'] border-b-2 border-white" : "text-white text-[1rem] leading-5 font-['Outfit']"}
                     >
                         Bookings

@@ -130,3 +130,13 @@ export async function resetPassword(token, password) {
         throw error.response.data;
     }
 }
+
+export async function myBookings() {
+    try {
+        const response = await baseUrl.get("/my-bookings");
+
+        return response.data;
+    } catch (error) {
+        throw error.response.data;
+    }
+}

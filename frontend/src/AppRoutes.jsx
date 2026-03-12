@@ -10,6 +10,7 @@ import BookService from "./features/auth/pages/BookService";
 import ForgotPassword from "./features/auth/pages/ForgotPassword";
 import ResetPassword from "./features/auth/pages/ResetPassword";
 import VerifyAccount from "./features/auth/pages/VerifyAccount";
+import MyBookings from "./features/auth/pages/MyBookings";
 
 const AppRoutes = () => {
     // <BrowserRouter>
@@ -60,6 +61,12 @@ const AppRoutes = () => {
                 {
                     path: "/reset-password/:token",
                     element: <ResetPassword />
+                },
+                {
+                    path: "/my-bookings",
+                    element: <ProtectedRoute>
+                        <MyBookings />
+                    </ProtectedRoute>
                 }
             ]
         },

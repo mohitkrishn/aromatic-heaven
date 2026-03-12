@@ -379,3 +379,26 @@ export const resetPassword = async (req, res) => {
         });
     }
 }
+
+export const getBookings = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        const bookings = await BookService.find({ user: userId })
+            .populate("service", "name price therapist")
+            .select("-user -__v");
+
+        return res.status(200).json({
+            success: true,
+            message: "Bookings retrieved successfully",
+            bookings
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+}

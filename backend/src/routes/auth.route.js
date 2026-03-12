@@ -1,5 +1,5 @@
 import express from "express";
-import { bookService, forgotPassword, getMe, loginUser, logoutUser, myAccount, registerUser, resetPassword, serviceDetails, verifyAccount } from "../controller/user.controller.js";
+import { bookService, forgotPassword, getBookings, getMe, loginUser, logoutUser, myAccount, registerUser, resetPassword, serviceDetails, verifyAccount } from "../controller/user.controller.js";
 import { verifyUser } from "../middlewares/user.middleware.js";
 import { allServices } from "../controller/services.controller.js";
 
@@ -20,7 +20,6 @@ router.post("/register", registerUser);
 
 /*
  * @desc Verify account via email link
- * @
  * /api/auth/verify-account
  */
 router.post("/verify-account/:token", verifyAccount);
@@ -69,6 +68,11 @@ router.post("/forgot-password", forgotPassword);
  * /api/auth/reset-password
  */
 router.post("/reset-password/:token", resetPassword);
+
+/** @desc Get all bookings
+ * /api/auth/my-bookings
+ */
+router.get("/my-bookings", verifyUser, getBookings);
 
 
 

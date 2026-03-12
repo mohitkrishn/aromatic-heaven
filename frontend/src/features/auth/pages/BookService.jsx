@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import texture from "../../../assets/images/textture-bg.avif"
 import bookBg from "../../../assets/images/PC-2.avif"
@@ -11,6 +11,8 @@ const BookService = () => {
     const { serviceId } = useParams(); // Assuming you're using react-router-dom's useParams hook
 
     const [service, setService] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getService(serviceId) {
@@ -42,13 +44,27 @@ const BookService = () => {
 
         // Implement the logic to book the service using the serviceId and bookingData
 
-        console.log(`Booking service with ID: ${serviceId} and data:`, bookingData);
+        // console.log(`Booking service with ID: ${serviceId} and data:`, bookingData);
 
         // You can make an API call to book the service here
         const response = await bookService(serviceId, bookingData.address, bookingData.mobile, bookingData.therapist);
 
-        console.log("Booking response:", response);
+        if (response?.success) {
+            setBookingData({
+                mobile: "",
+                address: "",
+                therapist: ""
+            });
 
+            alert("Service Booked Successfully");
+
+            navigate("/services");
+        } else {
+            alert("Something went wrong");
+        }
+
+
+        // console.log("Booking response:", response);
     }
 
     return <>
@@ -88,7 +104,7 @@ const BookService = () => {
                         type="tel"
                         placeholder="Mobile *"
                         className="w-full pt-2 border-b border-b-zinc-800 focus:outline-none"
-                        style={{fontFamily: "Outfit"}}
+                        style={{ fontFamily: "Outfit" }}
                         name="mobile"
                         value={bookingData.mobile}
                         onChange={handleChange}
@@ -97,18 +113,18 @@ const BookService = () => {
                         type="text"
                         placeholder="address *"
                         className="w-full pt-2 border-b border-b-zinc-800 focus:outline-none"
-                        style={{fontFamily: "Outfit"}}
+                        style={{ fontFamily: "Outfit" }}
                         name="address"
                         value={bookingData.address}
                         onChange={handleChange}
                     />
 
-                    <p className='text-gray-600 leading-0 mt-4' style={{fontFamily: "Outfit"}}>Select Therapist *</p>
+                    <p className='text-gray-600 leading-0 mt-4' style={{ fontFamily: "Outfit" }}>Select Therapist *</p>
                     <div className='w-full flex justify-start items-center gap-5'>
                         <div className='w-1/2 flex items-center gap-2'>
                             <label
                                 htmlFor="male"
-                                style={{fontFamily: "Outfit"}}
+                                style={{ fontFamily: "Outfit" }}
                             >
                                 Male
                             </label>
@@ -126,7 +142,7 @@ const BookService = () => {
                         <div className='w-1/2 flex items-center gap-2'>
                             <label
                                 htmlFor="female"
-                                style={{fontFamily: "Outfit"}}
+                                style={{ fontFamily: "Outfit" }}
                             >
                                 Female
                             </label>
