@@ -156,20 +156,16 @@ export const ORDER_CONFIRMATION_EMAIL_TEMPLATE = `
                             Amount to Pay: ₹[Price]
                         </div>
                     </div>
-                    
-                    <div style="text-align: center;">
-                        <a href="#" class="button">MANAGE BOOKING</a>
-                    </div>
                 </td>
             </tr>
 
             <tr>
                 <td class="footer">
                     <p><strong>Need to reschedule?</strong><br>
-                    Please call us at +91 XXXXX XXXXX at least 4 hours in advance.</p>
+                    Please call us at +91 XXXXX XXXXX at least 2 hours in advance.</p>
                     <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
                     <p><strong>Aromatic Heaven</strong><br>
-                    Tier-1 City Premium Wellness Center<br>
+                    City Premium Wellness Center<br>
                     Follow our journey on <a href="#" style="color: #d4af37;">Instagram</a></p>
                 </td>
             </tr>

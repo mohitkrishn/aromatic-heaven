@@ -172,7 +172,7 @@ export const WELCOME_EMAIL_TEMPLATE = `
             <tr>
                 <td class="footer">
                     <p><strong>Aromatic Heaven</strong><br>
-                    Ancient aroma therapy | Tier-1 City Services<br>
+                    Ancient aroma therapy | City Services<br>
                     Contact us: +91 9852364710 | info@aromaticheaven.in</p>
                     <p style="margin-top: 10px;">
                         <a href="#" style="color: #d4af37; text-decoration: none;">Instagram</a> | 
