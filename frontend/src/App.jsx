@@ -1,30 +1,26 @@
 import { useEffect } from "react";
-import AppRoutes from "./AppRoutes"
-// import texture from "./assets/images/textture-bg.avif"
-import { useLoginStore } from "./stores/auth.store"
+import { useLoginStore } from "./stores/auth.store";
+import { useAuthStore } from "./stores/admin/auth.admin";
+import AppRoutes from "./AppRoutes";
 
 const App = () => {
-
-  const checkAuth = useLoginStore(state => state.checkAuth);
+  const userCheckAuth = useLoginStore((state) => state.checkAuth);
+  const adminCheckAuth = useAuthStore((state) => state.checkAuth);
 
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      adminCheckAuth();
+    } else {
+      userCheckAuth();
+    }
+  }, [userCheckAuth, adminCheckAuth]);
 
   return (
-    <main
-      className="w-full min-h-screen"
-    >
-
-      {/* <div
-        className="w-full min-h-[140vh] md:min-h-[110vh] absolute inset-0 opacity-30 z-50 pointer-events-none"
-        style={{ backgroundImage: `url(${texture})` }}
-      >
-      </div> */}
-
+    <main className="w-full min-h-screen">
       <AppRoutes />
     </main>
-  )
-}
+  );
+};
 
-export default App
+export default App;

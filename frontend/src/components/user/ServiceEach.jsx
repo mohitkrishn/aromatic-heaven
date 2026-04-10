@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "./LoadingSpinner";
-import { useServicesStore } from "../stores/services.store";
+import LoadingSpinner from "../common/LoadingSpinner";
+import { useServicesStore } from "../../stores/services.store";
 import { useState } from "react";
-import LoadingSkelton from "./LoadingSkelton";
+import LoadingSkelton from "../common/LoadingSkelton";
 
 const ServiceEach = ({ service }) => {
     const { name, subTitle, description, image, price } = service;

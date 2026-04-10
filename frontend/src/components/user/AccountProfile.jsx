@@ -1,6 +1,6 @@
 import { User, Mail, Phone, LogOut, ShieldCheck } from 'lucide-react';
-import { useLoginStore } from '../stores/auth.store';
-import LoadingSpinner from './LoadingSpinner';
+import { useLoginStore } from '../../stores/auth.store';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 const AccountProfile = ({ user, onLogout }) => {
     // Mock data agar props na ho toh (Aap ise req.user se replace karenge)

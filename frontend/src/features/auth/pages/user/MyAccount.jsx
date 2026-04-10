@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useLoginStore } from "../../../stores/auth.store";
-import AccountProfile from "../../../components/AccountProfile";
-import { useUserAccountStore } from "../../../stores/useraccount.store";
+import { useLoginStore } from "../../../../stores/auth.store";
+import AccountProfile from "../../../../components/user/AccountProfile";
+import { useUserAccountStore } from "../../../../stores/useraccount.store";
 import { useEffect, useState } from "react";
-import LoadingSkelton from "../../../components/LoadingSkelton";
+import LoadingSkelton from "../../../../components/common/LoadingSkelton";
+import toast from "react-hot-toast";
 
 const MyAccount = () => {
 
@@ -13,6 +14,9 @@ const MyAccount = () => {
 
   const getAccountInfo = useUserAccountStore(state => state.getAccountInfo);
   const accountInfo = useUserAccountStore(state => state.accountInfo);
+
+  // error state for logout (should come from auth store, not user account store)
+  const logoutError = useLoginStore(state => state.error);
 
   const [loading, setLoading] = useState(true);
 
@@ -27,7 +31,15 @@ const MyAccount = () => {
 
   const handleLogout = async () => {
     await logout(); // Call the logout function from the store
-    navigate("/login"); // Navigate to the login page after logging out
+
+    if (logoutError) {
+      toast.error("Logout failed"); // Always show static error message
+      return;
+    }
+
+    toast.success("Logged out successfully"); // Always show static success message
+
+    navigate("/login");
   }
 
 

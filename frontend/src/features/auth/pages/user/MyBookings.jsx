@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import BookingCard from "../../../components/BookingCard";
-import { useMyBookingStore } from "../../../stores/myBookings.store";
-import LoadingSkelton from "../../../components/LoadingSkelton";
+import BookingCard from "../../../../components/user/BookingCard";
+import { useMyBookingStore } from "../../../../stores/myBookings.store";
+import LoadingSkelton from "../../../../components/common/LoadingSkelton";
 
 const RecentBookings = () => {
 
@@ -18,11 +18,11 @@ const RecentBookings = () => {
 
     const loading = useMyBookingStore(state => state.loading);
     const myBookings = useMyBookingStore(state => state.myBookings);
-    const getAllBookings = useMyBookingStore(state => state.getAllBookings);
 
     useEffect(() => {
-        getAllBookings();
-    }, [myBookings, getAllBookings]);
+        // Call getAllBookings only once on mount
+        useMyBookingStore.getState().getAllBookings();
+    }, []);
 
 
     return <>

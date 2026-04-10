@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import { resetPassword } from "../services/auth.api";
+import { resetPassword } from "../../services/auth.api";
 import { Eye, EyeClosed } from "lucide-react";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import LoadingSpinner from "../../../../components/common/LoadingSpinner";
 
 const ResetPassword = () => {
 

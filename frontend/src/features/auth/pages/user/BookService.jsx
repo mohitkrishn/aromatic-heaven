@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import texture from "../../../assets/images/textture-bg.avif"
-import bookBg from "../../../assets/images/PC-2.avif"
-import { bookService, getServiceDetails } from '../services/auth.api';
+import bookBg from "../../../../assets/images/PC-2.avif"
+import { bookService, getServiceDetails } from '../../services/auth.api';
 import { motion } from 'motion/react';
 
 const BookService = () => {
@@ -67,18 +66,19 @@ const BookService = () => {
         // console.log("Booking response:", response);
     }
 
+    const handlePhoneNumberInput = (e) => {
+        const { value } = e.target;
+
+        if (!/^\d{0,10}$/.test(value)) {
+            e.preventDefault();
+        }
+    };
+
     return <>
         <main
             className="w-full h-screen px-4 bg-center bg-cover flex flex-col gap-5 items-center justify-center"
             style={{ backgroundImage: `url('${bookBg}')`, filter: "grayscale(100%)" }}
         >
-            <div
-                className="w-full h-full absolute inset-0 z-30 opacity-40 pointer-events-none"
-                style={{ backgroundImage: `url(${texture})` }}
-            >
-
-            </div>
-
             <motion.div
                 className="w-full max-w-xs rounded-3xl bg-white p-4 flex flex-col items-center gap-6"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -101,16 +101,21 @@ const BookService = () => {
                     onSubmit={handleBookService}
                 >
                     <input
-                        type="tel"
+                        type="text"
+                        required
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         placeholder="Mobile *"
                         className="w-full pt-2 border-b border-b-zinc-800 focus:outline-none"
                         style={{ fontFamily: "Outfit" }}
                         name="mobile"
                         value={bookingData.mobile}
                         onChange={handleChange}
+                        onInput={handlePhoneNumberInput}
                     />
                     <input
                         type="text"
+                        required
                         placeholder="address *"
                         className="w-full pt-2 border-b border-b-zinc-800 focus:outline-none"
                         style={{ fontFamily: "Outfit" }}
@@ -130,6 +135,7 @@ const BookService = () => {
                             </label>
                             <input
                                 type="radio"
+                                required
                                 name="therapist"
                                 id="male"
                                 value="male"
@@ -148,6 +154,7 @@ const BookService = () => {
                             </label>
                             <input
                                 type="radio"
+                                required
                                 name="therapist"
                                 id="female"
                                 value="female"

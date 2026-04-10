@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import Admin from "../models/admin.model.js";
 import Services from "../models/services.model.js";
 import uploadFile from "../services/storage.service.js";
-import { generateToken } from "./auth.controller.js";
+import { generateAdminToken } from "./auth.controller.js";
 import BookService from "../models/bookService.model.js";
+import User from "../models/user.model.js";
 
 
 export const registerAdmin = async (req, res) => {
@@ -29,13 +30,14 @@ export const registerAdmin = async (req, res) => {
 
         const newAdmin = await new Admin({
             adminId,
+            role: "admin",
             email,
             password: hashedPassword
         });
 
         await newAdmin.save();
 
-        const token = await generateToken(newAdmin, res);
+        const token = generateAdminToken(newAdmin, res);
 
         res.status(201).json({
             message: "Admin registered successfully",
@@ -83,12 +85,14 @@ export const addService = async (req, res) => {
         await newService.save();
 
         res.status(201).json({
+            success: true,
             message: "Service added successfully",
             service: newService
         });
 
     } catch (error) {
         res.status(500).json({
+            success: false,
             message: "Error adding service",
             error: error.message
         });
@@ -124,12 +128,13 @@ export const loginAdmin = async (req, res) => {
             });
         }
 
-        const token = generateToken(admin, res);
+        const adminToken = generateAdminToken(admin, res);
 
         res.status(200).json({
+            user: { ...admin._doc, password: undefined },
             success: true,
             message: "Admin logged in successfully",
-            token
+            adminToken
         });
 
     } catch (error) {
@@ -140,17 +145,25 @@ export const loginAdmin = async (req, res) => {
     }
 }
 
-export const logoutAdmin = async (req, res) => {
-    const token = req.cookies?.token;
+export const getAdmin = async (req, res) => {
+    return res.status(200).json({
+        success: true,
+        user: req.user
+    })
 
-    if (!token) {
+}
+
+export const logoutAdmin = async (req, res) => {
+    const adminToken = req.cookies?.adminToken;
+
+    if (!adminToken) {
         return res.status(400).json({
             success: false,
             message: "Already logged out"
         });
     }
 
-    res.clearCookie("token");
+    res.clearCookie("adminToken");
 
     res.status(200).json({
         success: true,
@@ -249,6 +262,124 @@ export const sortBookings = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Error retrieving bookings",
+            error: error.message
+        });
+    }
+}
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find().select("-password -__v");
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No any users yet"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            length: users.length,
+            message: "Users retrieved successfully",
+            users
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving users",
+            error: error.message
+        });
+    }
+}
+
+export const getAllServices = async (req, res) => {
+    try {
+        const services = await Services.find().select("-__v");
+
+        if (services.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No any services yet"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            length: services.length,
+            message: "Services retrieved successfully",
+            services
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error retrieving services",
+            error: error.message
+        });
+    }
+}
+
+export const updateService = async (req, res) => {
+    const { id } = req.params;
+
+    const { name, subTitle, description, price } = req.body;
+
+    try {
+        //check if service exists
+        const updatedService = await Services.findByIdAndUpdate(
+            id,
+            { name, subTitle, description, price },
+            { new: true }
+        );
+
+        if (!updatedService) {
+            return res.status(404).json({
+                success: false,
+                message: "Service not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Service updated successfully",
+            service: updatedService
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error updating service",
+            error: error.message
+        });
+    }
+}
+
+export const deleteService = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        //check if service exists
+        const deletedService = await Services.findByIdAndDelete(id);
+
+        if (!deletedService) {
+            return res.status(404).json({
+                success: false,
+                message: "Service not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Service deleted successfully",
+            service: deletedService
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error deleting service",
             error: error.message
         });
     }

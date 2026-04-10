@@ -1,8 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Lexend+Deca:wght@100..900&family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
+html,
+body {
+    scroll-behavior: smooth !important;
+}
 
-*::selection {
-    background-color: #ff0000;
-    color: #fff;
+::-webkit-scrollbar{
+    display: none;
+}
+
+::-webkit-scrollbar-track{
+    display: none;
 }

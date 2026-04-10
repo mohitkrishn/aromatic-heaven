@@ -8,15 +8,28 @@ import { generateToken } from "./auth.controller.js";
 import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, mobile } = req.body;
 
     try {
-        //check if user already exists
-        const existingUser = await User.findOne({ email });
+        //check if all fields are filled
+        if (!name || !password || !mobile || !email) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+
+        //check if user already exists with same email or mobile number
+        const existingUser = await User.findOne({
+            $or: [
+                { email },
+                { mobile }
+            ]
+        });
 
         if (existingUser) {
             return res.status(400).json({
-                message: `User with email ${email} already exists`
+                message: `User with email ${email} or mobile number ${mobile} already exists`
             });
         }
 
@@ -35,6 +48,8 @@ export const registerUser = async (req, res) => {
         const newUser = new User({
             name,
             email,
+            role: "user",
+            mobile: mobile ? mobile : null,
             password: hashedPassword
         });
 
@@ -167,7 +182,7 @@ export const logoutUser = (req, res) => {
 export const bookService = async (req, res) => {
     try {
         const { serviceId, address, mobile, therapist } = req.body;
-        const userId = req.user._id;
+        let userId = req.user._id;
 
         // Check if service exists
         const service = await Services.findById(serviceId);
@@ -187,6 +202,9 @@ export const bookService = async (req, res) => {
         //     });
         // }
 
+        //generate a booking id with a constant prefix and a continuous incrementing number
+        const bookingId = "BK" + new Date().getFullYear() + (await BookService.countDocuments() + 1);
+
         // Create new booking
         const newBooking = await new BookService({
             user: userId,
@@ -194,6 +212,7 @@ export const bookService = async (req, res) => {
             address,
             mobile,
             therapist,
+            bookingId,
             status: "confirmed"
         });
 

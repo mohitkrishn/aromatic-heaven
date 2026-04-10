@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import loginBg from "../../../assets/images/PC-14.jpg";
-import { useLoginStore } from '../../../stores/auth.store';
+import loginBg from "../../../../assets/images/PC-14.jpg";
+import { useLoginStore } from '../../../../stores/auth.store';
 import { Eye, EyeOff } from 'lucide-react';
-import LoadingSpinner from '../../../components/LoadingSpinner';
+import LoadingSpinner from '../../../../components/common/LoadingSpinner';
+import toast from 'react-hot-toast';
 
 const Login = () => {
     const [userData, setUserData] = useState({
@@ -20,17 +21,24 @@ const Login = () => {
     const user = useLoginStore(state => state.user);
     const loading = useLoginStore(state => state.loading);
 
+    //message from store
+    const message = useLoginStore(state => state.message);
+
+
     // After login, redirect to original page or fallback
     useEffect(() => {
         if (user) {
+            toast.success(message || "Login successful!");
+
             const redirectPath = location.state?.from?.pathname || "/my-account";
 
             navigate(redirectPath, { replace: true });
         }
-    }, [user, navigate, location.state]);
+    }, [user, navigate, location.state, message]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        
         setUserData({
             ...userData,
             [name]: value

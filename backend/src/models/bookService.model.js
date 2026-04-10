@@ -31,6 +31,12 @@ const bookServiceSchema = new Schema({
         enum: ["male", "female"]
     },
 
+    bookingId: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
     status: {
         type: String,
         enum: ['pending', 'confirmed', 'completed', 'cancelled'],

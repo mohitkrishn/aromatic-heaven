@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { signup } from "../services/auth.api";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import signupBg from "../../../assets/images/pc-13.jpg";
-import texture from "../../../assets/images/textture-bg.avif";
+import { signup } from "../../services/auth.api";
+import LoadingSpinner from "../../../../components/common/LoadingSpinner";
+import signupBg from "../../../../assets/images/pc-13.jpg";
+import toast from "react-hot-toast";
 
 const Signup = () => {
 
@@ -28,7 +28,10 @@ const Signup = () => {
         setLoading(true);
         try {
             let response = await signup(userData);
+
             if (response?.success) {
+                toast.success(response.message || "Signup successful! Please login.");
+
                 setUserData({
                     name: "",
                     email: "",
@@ -37,7 +40,7 @@ const Signup = () => {
                 window.location.href = "/login";
             }
         } catch (err) {
-            console.log(err);
+            toast.error(err.message || "Signup failed. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -53,12 +56,6 @@ const Signup = () => {
                 }
             }
         >
-            <div
-                className="w-full h-full absolute inset-0 z-30 opacity-40 pointer-events-none"
-                style={{ backgroundImage: `url(${texture})` }}
-            >
-
-            </div>
 
             <div
                 className="min-w-2xs rounded-3xl bg-white p-4 flex flex-col items-center gap-6"

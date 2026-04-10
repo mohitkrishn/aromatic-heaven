@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { verifyAccount } from "../services/auth.api";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import { verifyAccount } from "../../services/auth.api";
+import LoadingSpinner from "../../../../components/common/LoadingSpinner";
 
 const VerifyAccount = () => {
     const { token } = useParams();

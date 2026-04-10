@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { NavLink, useNavigate } from "react-router-dom"
-import brandLogo from "../assets/images/LOGO_BRAND@PNG_.png"
+import brandLogo from "../../assets/images/LOGO_BRAND@PNG_.png"
 
 // MenuBtn Component for menu reference
 // const MenuBtn = ({ children, delay, ...props }) => {

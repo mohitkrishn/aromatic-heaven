@@ -51,6 +51,7 @@ router.get("/all-services", allServices);
 
 /**
  * /api/auth/me
+ * @desc get user and admin details based on the token in cookie
  */
 router.get("/me", verifyUser, getMe);
 

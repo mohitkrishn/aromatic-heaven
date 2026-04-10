@@ -7,6 +7,10 @@ const adminSchema = new Schema({
         maxlength: 15,
         required: true
     },
+    role: {
+        type: String,
+        default: "admin",
+    },
     email: {
         type: String,
         required: true,

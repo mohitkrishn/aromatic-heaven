@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { forgotPassword } from "../services/auth.api";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import { forgotPassword } from "../../services/auth.api";
+import LoadingSpinner from "../../../../components/common/LoadingSpinner";
 
 const ForgotPassword = () => {
 
